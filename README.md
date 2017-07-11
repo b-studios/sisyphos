@@ -1,4 +1,4 @@
-# Sisyphos -- Multiple Choice Entering Tool
+# Sisyphos - Multiple Choice Entering Tool
 A simple command-line based alternative to enter given answers to
 multiple choice questions. Sisyphos conforms to the format of the
 Aarhus [Multiple Choice Tool](http://www.brics.dk/Multiple/) and
@@ -26,4 +26,7 @@ Some commands can be abbreviated; Abbreviation given in parenthesis.
 :help (:h)                   shows this summary of available commands
 :reenter [n] (:r)            reenter the answers to the n-last questions (n=1, if omitted)
 ```
+
+## Text-to-Speech
+To reduce the error rate of entering answers even more, we added a simple TTS that reads out the entered options. For now this is only supported on Mac OSX. To use the variant, for now, you have to checkout the [tts branch](https://github.com/b-studios/sisyphos/tree/tts) and run `sbt oneJar` to compile build the project. 
 
