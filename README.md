@@ -28,5 +28,5 @@ Some commands can be abbreviated; Abbreviation given in parenthesis.
 ```
 
 ## Text-to-Speech
-To reduce the error rate of entering answers even more, we added a simple TTS that reads out the entered options. For now this is only supported on Mac OSX. To use the variant, for now, you have to checkout the [tts branch](https://github.com/b-studios/sisyphos/tree/tts) and run `sbt oneJar` to compile build the project. 
+To reduce the error rate of entering answers even more, we added a simple TTS that reads out the entered options. For now this is only supported on Mac OSX. To use the variant, download the `sisyphos-tts.jar` instead of the `sisyphos.jar`.
 
