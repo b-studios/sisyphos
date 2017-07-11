@@ -29,7 +29,7 @@ object Enter extends App {
   }
 
   def say(s: String): Unit =
-    s"say $s -r 300" !
+    s"say $s -r 300".run()
 
   val logo =
      """   _______ _________ _______                 _______           _______  _______
