@@ -1,6 +1,8 @@
 import sbt.io.IO.append
 import scala.io.AnsiColor._
 import scala.io.StdIn
+import scala.sys.process._
+
 
 /**
  * Run with filename (e.g. `exam.scores`) as first and only argument.
@@ -25,6 +27,9 @@ object Enter extends App {
     print("> ")
     f
   }
+
+  def say(s: String): Unit =
+    s"say $s -r 300" !
 
   val logo =
      """   _______ _________ _______                 _______           _______  _______
@@ -160,6 +165,11 @@ object Enter extends App {
       input { answer =>
         val answerOrDash = if (answer == "") "-" else answer
         answers = answers :+ answerOrDash
+        if (answerOrDash == "-") {
+          say("empty")
+        } else {
+          say(answerOrDash.toList.mkString("-"))
+        }
         enterAnswers
       }
     }
