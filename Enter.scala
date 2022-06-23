@@ -1,6 +1,7 @@
 import sbt.io.IO.append
 import scala.io.AnsiColor._
 import scala.io.StdIn
+
 /**
  * Run with filename (e.g. `exam.scores`) as first and only argument.
  *
@@ -60,11 +61,20 @@ object Enter extends App {
   if (args.size < 1) {
     println("""Please invoke tool with name of the score file as first argument (e.g.):
               |   java -jar enter.jar my-score-file.scores
+              |
+              |You can call the tool with two arguments, where the second is the name of a
+              |meta-data file to be written.
+              |  java -jar enter.jar my-score-file.scores meta-data.csv
               |""".stripMargin('|'))
     System.exit(1)
   }
 
   val scoreFile = new java.io.File(args(0))
+  def appendToScores(content: String): Unit = append(scoreFile, content)
+
+  val shouldCollectMetadata = args.size > 1
+  lazy val metadataFile = new java.io.File(args(1))
+  def appendToMetadata(content: String): Unit = if (shouldCollectMetadata) append(metadataFile, content)
 
   println(banner)
 
@@ -78,6 +88,15 @@ object Enter extends App {
   println("What is the highest possible answer in the exam (e.g. 'a' - 'z')?")
   val maxAnswer = prompt(StdIn.readChar)
 
+  val metadataFields = if (shouldCollectMetadata) {
+    println("How many different meta-data fields do you want to enter?")
+    val numberOfFields = prompt(StdIn.readInt)
+    (1 to numberOfFields).map { n =>
+      println(s"What is the name of the ${n}. field?")
+      StdIn.readLine()
+    }.toList
+  } else { Nil }
+
   println("You can now start entering data, for a list of available commands, type :help")
 
   println(sep)
@@ -88,6 +107,7 @@ object Enter extends App {
 
     var studentid: String = ""
     var examid: String = ""
+    var metadata: List[String] = Nil
 
     editStudentId
     editExamId
@@ -124,6 +144,13 @@ object Enter extends App {
         }
     }
 
+    def enterMetaData: Unit = if (shouldCollectMetadata) {
+      metadata = metadataFields.map { field =>
+        println(s"Please enter meta data for '${field}':")
+        StdIn.readLine
+      }.toList
+    }
+
     def enterAnswers: Unit = {
       if (done) {
         return;
@@ -152,7 +179,13 @@ object Enter extends App {
     }
 
     def writeToFile: Unit = {
-      append(scoreFile, s"$studentid $examid ${formatAnswers(answers)}\n")
+      appendToScores(s"$studentid $examid ${formatAnswers(answers)}\n")
+      if (shouldCollectMetadata) {
+        // meta data format:
+        // studentid;examid;field1;field2;...
+        val data = studentid :: examid :: metadata
+        appendToMetadata(data.mkString(";") + "\n")
+      }
     }
 
     def formatAnswers(ans: Answers): String =
@@ -166,6 +199,7 @@ object Enter extends App {
     println(s"\n${BOLD}${YELLOW}Next Student${RESET}")
 
     val exam = new Exam
+    exam.enterMetaData
     exam.enterAnswers
     exam.writeToFile
 
