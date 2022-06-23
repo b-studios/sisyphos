@@ -1,6 +1,6 @@
-import sbt.IO.append
+import sbt.io.IO.append
 import scala.io.AnsiColor._
-
+import scala.io.StdIn
 /**
  * Run with filename (e.g. `exam.scores`) as first and only argument.
  *
@@ -59,7 +59,7 @@ object Enter extends App {
 
   if (args.size < 1) {
     println("""Please invoke tool with name of the score file as first argument (e.g.):
-              |   score my-score-file.scores
+              |   java -jar enter.jar my-score-file.scores
               |""".stripMargin('|'))
     System.exit(1)
   }
@@ -73,10 +73,10 @@ object Enter extends App {
   println("Let me briefly ask you a few things about the exam:\n")
 
   println("How many questions does the exam have?")
-  val questionCount = prompt(readInt)
+  val questionCount = prompt(StdIn.readInt)
 
   println("What is the highest possible answer in the exam (e.g. 'a' - 'z')?")
-  val maxAnswer = prompt(readChar)
+  val maxAnswer = prompt(StdIn.readChar)
 
   println("You can now start entering data, for a list of available commands, type :help")
 
@@ -94,7 +94,7 @@ object Enter extends App {
 
     var answers: Answers = Nil
 
-    def input(k: String => Unit): Unit = prompt(readLine) match {
+    def input(k: String => Unit): Unit = prompt(StdIn.readLine) match {
       case ReEnterN(n) =>
         dropLast(n)
         enterAnswers
@@ -107,7 +107,8 @@ object Enter extends App {
       case Edit(ExamId) =>
         editExamId
         enterAnswers
-      case Exit() => System.exit(0)
+      case Exit() =>
+        System.exit(0)
       case Help() =>
         println(Cmd.toString + "\n")
         input(k)
@@ -138,12 +139,12 @@ object Enter extends App {
 
     def editStudentId: Unit = {
       println("Please enter student id:")
-      studentid = prompt(readLine)
+      studentid = prompt(StdIn.readLine)
     }
 
     def editExamId: Unit = {
       println("Please enter the four-digit id of the exam (e.g. 4335):")
-      examid = prompt(readLine)
+      examid = prompt(StdIn.readLine)
     }
 
     def dropLast(n: Int = 1): Unit = {

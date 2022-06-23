@@ -1,9 +1,3 @@
-import com.github.retronym.SbtOneJar._
+libraryDependencies += "org.scala-sbt" %% "io" % "1.6.0"
 
-oneJarSettings
-
-resolvers += Resolver.url("typesafe", url("http://repo.typesafe.com/typesafe/ivy-releases/"))(Resolver.ivyStylePatterns)
-
-libraryDependencies += "org.scala-sbt" %% "io" % "0.13.9"
-
-scalaVersion := "2.11.7"
+scalaVersion := "2.13.8"
