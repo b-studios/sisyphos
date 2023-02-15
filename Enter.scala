@@ -141,6 +141,7 @@ object Enter extends App {
         println(s"I don't understand command '${cmd}', enter ':help' for available commands.")
         input(k)
       case in =>
+        println(s"'${in}'")
         if (! in.toSet.forall { _ <= maxAnswer }) {
           println("Not a valid answer")
           enterAnswers
